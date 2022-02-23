@@ -3,11 +3,12 @@ import requests
 import en_core_web_sm
 import re
 
-nlp = en_core_web_sm.load()
 regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+nlp = en_core_web_sm.load()
 
 
-def main(input_str):
+def main():
+    input_str = input("Please input a string: ")
     nlp_str = [(x.orth_, x.pos_, x.lemma_, x.ent_type_) for x in [y
                                                                   for y
                                                                   in nlp(input_str)]]
@@ -25,7 +26,7 @@ def main(input_str):
                     i = j - 1
                     break
 
-            response = requests.get(url="https://en.wikipedia.org/wiki/" + person_name)
+            response = requests.get(url="https://en.wikipedia.org/wiki/" + person_name, )
             if not response.status_code == 200:
                 nn = person_name.replace("_", " ")
                 input_str = input_str.replace(nn, "REDACT")
