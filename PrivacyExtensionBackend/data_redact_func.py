@@ -27,11 +27,9 @@ def remove_phone_zip(input_str):
 @cross_origin()
 def main():
     input_str = request.json
-    print(input_str)
     nlp_str = [(x.orth_, x.pos_, x.lemma_, x.ent_type_) for x in [y
                                                                   for y
                                                                   in nlp(input_str)]]
-    print(nlp_str)
     n = len(nlp_str)
     i = 0
     while i < n:
