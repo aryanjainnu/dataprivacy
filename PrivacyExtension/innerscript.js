@@ -1,19 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     var submitButton = document.getElementById("submit-button");
     submitButton.addEventListener('click', async function(){
-        var x = document.getElementById("text-input").value;
-        // WE WILL DO SOMETHING COOL WITH THE VALUE, RN JUST IS THE DOGGY EXAMPLE
-        var stuff = await accessAnalysis(x)
-        // document.getElementById("echo").value = exampleFunction(x);
-        document.getElementById("echo").value = stuff;
+        var userText = document.getElementById("text-input").value;
+        var redactedText = await accessAnalysis(userText);
+        document.getElementById("echo").value = redactedText;
     })
 })
 
-function exampleFunction(x) {
-    return x.replace(/dog/g, "precious boi");
-}
-
-async function accessAnalysis(text){
+async function accessAnalysis(userText){
+    // the url might vary between systems but this is the url flask makes for me
     const response = await fetch('http://127.0.0.1:5000/',
     {
         method: 'POST',
@@ -21,7 +16,7 @@ async function accessAnalysis(text){
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(text)
+        body: JSON.stringify(userText)
     }
     );
     return response.json();

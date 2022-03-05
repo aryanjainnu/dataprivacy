@@ -23,19 +23,15 @@ def remove_phone_zip(input_str):
     str_return = " ".join(str_arr)
     return str_return
 
-@app.route('/test')
-@cross_origin()
-def hello_world():
-    return jsonify('Hello, World!')
-
 @app.route('/', methods=['POST'])
 @cross_origin()
 def main():
     input_str = request.json
-    print(type(input_str))
+    print(input_str)
     nlp_str = [(x.orth_, x.pos_, x.lemma_, x.ent_type_) for x in [y
                                                                   for y
                                                                   in nlp(input_str)]]
+    print(nlp_str)
     n = len(nlp_str)
     i = 0
     while i < n:
@@ -61,11 +57,7 @@ def main():
                 input_str = input_str.replace(nlp_str[i][0], "REDACT")
         i += 1
     input_str = remove_phone_zip(input_str)
-    #print("final: ", input_str)
-    print(type(input_str))
     return jsonify(input_str)
 
 if __name__ == '__main__':
     app.run()
-
-#main('Hi im Aura and I live in Waukegan, IL 60085. Im 21 yo female. Call me at (224)413-5635. My social security number is 11-11-1111. My emails are aura@u.northwestern.edu and abd@xyz.com.')
