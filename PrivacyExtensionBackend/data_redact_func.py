@@ -1,13 +1,19 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 import nltk
 import requests
 import en_core_web_sm
 import re
 
-nlp = en_core_web_sm.load()
-regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
-regex_phone = re.compile("^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$", re.IGNORECASE)
-regex_zip = re.compile("(^\d{5}$)|(^\d{9}$)|(^\d{5}-\d{4}$)", re.IGNORECASE)
+app = Flask(__name__)
+CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
+nlp = en_core_web_sm.load()
+
+regex_email = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+regex_phone = re.compile('[\+\d]?(\d{2,3}[-\.\s]??\d{2,3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})', re.IGNORECASE)
+regex_zip = re.compile("(^\d{5}$)|(^\d{9}$)|(^\d{5}-\d{4}$)", re.IGNORECASE)
 
 def remove_phone_zip(input_str):
     str_arr = input_str.split()
@@ -17,8 +23,16 @@ def remove_phone_zip(input_str):
     str_return = " ".join(str_arr)
     return str_return
 
+@app.route('/test')
+@cross_origin()
+def hello_world():
+    return jsonify('Hello, World!')
 
-def main(input_str):
+@app.route('/', methods=['POST'])
+@cross_origin()
+def main():
+    input_str = request.json
+    print(type(input_str))
     nlp_str = [(x.orth_, x.pos_, x.lemma_, x.ent_type_) for x in [y
                                                                   for y
                                                                   in nlp(input_str)]]
@@ -47,7 +61,11 @@ def main(input_str):
                 input_str = input_str.replace(nlp_str[i][0], "REDACT")
         i += 1
     input_str = remove_phone_zip(input_str)
-    print("final: ", input_str)
+    #print("final: ", input_str)
+    print(type(input_str))
+    return jsonify(input_str)
 
+if __name__ == '__main__':
+    app.run()
 
-main()
+#main('Hi im Aura and I live in Waukegan, IL 60085. Im 21 yo female. Call me at (224)413-5635. My social security number is 11-11-1111. My emails are aura@u.northwestern.edu and abd@xyz.com.')

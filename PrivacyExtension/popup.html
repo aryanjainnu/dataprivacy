@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <title>PII Detector</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>PII Detector</h1>
+        <div>
+            <label for="info">Add your text here!</label>
+        </div>
+        <div id="text-input-container">
+            <textarea id="text-input" placeholder="Start writing or copy and paste here!"></textarea>
+        </div>
+        <br>
+        <div id="button-container">
+            <button id="submit-button" type="button">Try it</button>
+        </div>
+        <label for="result">Results!</label>
+        <textarea 
+                readonly 
+                id="echo"
+                placeholder="Press the Try It button to see your results..."
+        ></textarea>
+        <br>
+        <br>
+        <script src="innerscript.js"></script>
+    </body>
+</html>

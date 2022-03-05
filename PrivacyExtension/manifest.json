@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Privacy Extension",
+    "version": "0.1",
+    "description": "An extension to alert and remove any personal information from the posts you're about to make.",
+    "action": {
+        "default_icon": "icon.png",
+        "default_popup": "popup.html",
+        "default_title": "Privacy Extension"
+    },
+    "permissions": [
+        "activeTab"
+    ],
+    "content_scripts":[
+        {
+            "matches": [
+                "*://*/*"
+            ],
+           "js": [
+               "outerscript.js"
+            ],
+            "run_at": "document_end" 
+        }
+    ]
+}
